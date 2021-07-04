@@ -1,0 +1,25 @@
+{% extends 'project/base.html' %}
+<!--  -->
+
+{% block content %}
+
+<br />
+<div class="container">
+  <div class="row">
+    <div class="col-md-6">
+      <div class="card card-body">
+        <p>Are you sure you want to delete "{{ client.name }}"?</p>
+
+        <form action="{% url 'delete_client' client.id %}" method="post">
+          {% csrf_token %}
+          <a class="btn btn-sm text-primary pr-6" href="{% url 'home' %}"
+            >Cancel</a
+          >
+          <input class="btn btn-danger btn-sm" type="submit" name="Confirm" />
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+
+{% endblock %}

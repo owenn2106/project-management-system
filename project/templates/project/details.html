@@ -1,0 +1,36 @@
+{% extends 'project/base.html' %}
+<!--  -->
+
+{% block content %}
+
+<br />
+
+<div class="container">
+  <div class="row">
+    <div class="col-md-5">
+      <div class="card mb-3">
+        <div class="card-header">Client Details</div>
+        <div class="card-body">
+          <p class="card-text">Client ID: {{ client.id }}</p>
+          <p class="card-text">Client Name: {{ client.name }}</p>
+          <p class="card-text">Client Phone: {{ client.phone }}</p>
+          <p class="card-text">Client Email: {{ client.email }}</p>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-7">
+      <div class="card mb-3">
+        <div class="card-header">Project Summary</div>
+        <div class="card-body">
+          <p class="card-text">Project ID: {{ project.id }}</p>
+          <p class="card-text">Project Name: {{ project.name }}</p>
+          <p class="card-text">Description: {{ project.description }}</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  {% include 'project/todolist.html' %}
+</div>
+
+{% endblock %}

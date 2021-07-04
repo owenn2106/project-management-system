@@ -1,0 +1,37 @@
+<br />
+
+<div class="row">
+  <h5>TO-DO Table</h5>
+  <hr />
+
+  <div class="card card-body">
+    <a
+      class="btn btn-primary btn-sm btn-block"
+      href="{% url 'create_task' project.id %}"
+      >Add New Task</a
+    >
+    <br />
+    <table class="table table-sm">
+      <tr>
+        <th>Time Created</th>
+        <th>Task</th>
+        <th>Targetted Time</th>
+        <th>Status</th>
+        <th>Mark as Done</th>
+        <th>Edit</th>
+        <th>Remove</th>
+      </tr>
+      {% for todo in todolist %}
+      <tr>
+        <td>{{ todo.date_created }}</td>
+        <td>{{ todo.task }}</td>
+        <td>{{ todo.target_time }}</td>
+        <td>{{ todo.status }}</td>
+        <td><a href="#">Mark as Done</a></td>
+        <td><a href="#">Edit</a></td>
+        <td><a href="#">Remove</a></td>
+      </tr>
+      {% endfor %}
+    </table>
+  </div>
+</div>

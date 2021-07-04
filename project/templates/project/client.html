@@ -1,0 +1,94 @@
+{% extends 'project/base.html' %}
+<!--  -->
+
+{% block content %}
+
+<br />
+
+<div class="container">
+  <div class="row">
+    <div class="col-md-6">
+      <div class="card mb-3">
+        <div class="card-header">Details</div>
+        <div class="card-body">
+          <p class="card-text">Client ID: {{ client.id }}</p>
+          <p class="card-text">Client Name: {{ client.name }}</p>
+          <p class="card-text">Client Phone: {{ client.phone }}</p>
+          <p class="card-text">Client Email: {{ client.email }}</p>
+          <p class="card-text">Date Created: {{ client.date_created }}</p>
+
+          <div
+            class="btn-wrapper"
+            style="
+              display: flex;
+              justify-content: flex-end;
+              align-items: center;
+            "
+          >
+            <a
+              href="{% url 'update_client' client.id %}"
+              class="btn btn-primary btn-block mx-3"
+              >Edit</a
+            >
+            <a
+              href="{% url 'delete_client' client.id %}"
+              class="btn btn-danger btn-block"
+              >Remove</a
+            >
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-md-6">
+      <div class="card mb-3">
+        <div class="card-header">Total Projects</div>
+        <div class="card-body">
+          <h5 class="card-title" style="text-align: center">
+            {{ total_projects }}
+          </h5>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="row">
+    <h5>Projects</h5>
+    <hr />
+
+    <div class="card card-body">
+      <table class="table table-sm">
+        <tr>
+          <th>Project</th>
+          <th>Deadline</th>
+          <th>Status</th>
+          <th>Update</th>
+          <th>Remove</th>
+        </tr>
+        {% for proj in projects %}
+        <tr>
+          <td>{{ proj.name }}</td>
+          <td>{{ proj.deadline }}</td>
+          <td>{{ proj.status }}</td>
+          <td>
+            <a
+              class="btn btn-sm btn-info"
+              href="{% url 'update_project' proj.id %}"
+              >Update</a
+            >
+          </td>
+          <td>
+            <a
+              class="btn btn-sm btn-danger"
+              href="{% url 'delete_project' proj.id %}"
+              >Remove</a
+            >
+          </td>
+        </tr>
+        {% endfor %}
+      </table>
+    </div>
+  </div>
+</div>
+
+{% endblock %}

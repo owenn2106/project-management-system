@@ -1,0 +1,93 @@
+{% extends 'project/base.html' %}
+<!--  -->
+
+{% block content %}
+<!--  -->
+{% include 'project/status.html' %}
+
+<br />
+
+<div class="container">
+  <div class="row">
+    <div class="col-md-4">
+      <h5>CLIENTS</h5>
+      <hr />
+
+      <div class="card card-body">
+        <a
+          class="btn btn-primary btn-sm btn-block"
+          href="{% url 'create_client' %}"
+          >Register a New Client</a
+        >
+        <br />
+        <table class="table table-sm">
+          <tr>
+            <th>Client Name</th>
+            <th>Phone Number</th>
+            <th></th>
+          </tr>
+          {% for client in clients %}
+          <tr>
+            <td>{{client.name}}</td>
+            <td>{{client.phone}}</td>
+            <td><a href="{% url 'client' client.id %}">View</a></td>
+          </tr>
+          {% endfor %}
+        </table>
+      </div>
+    </div>
+
+    <div class="col-md-8">
+      <h5>PROJECTS</h5>
+      <hr />
+
+      <div class="card card-body">
+        <a
+          class="btn btn-primary btn-sm btn-block"
+          href="{% url 'create_project' %}"
+          >Create a New Project</a
+        >
+        <br />
+        <table class="table table-sm">
+          <tr>
+            <th>Project Name</th>
+            <th>Client Name</th>
+            <th>Deadline</th>
+            <th>Status</th>
+            <th></th>
+            <th></th>
+          </tr>
+          {% for proj in projects %}
+          <tr>
+            <td>{{ proj.name }}</td>
+            <td>{{ proj.client }}</td>
+            <td>{{ proj.deadline }}</td>
+            <td>{{ proj.status }}</td>
+            <td>
+              <a class="btn btn-info btn-sm" href="{% url 'project' proj.id %}"
+                >View</a
+              >
+            </td>
+            <td>
+              <a
+                class="btn btn-info btn-sm"
+                href="{% url 'update_project' proj.id %}"
+                >Update</a
+              >
+            </td>
+            <td>
+              <a
+                class="btn btn-danger btn-sm"
+                href="{% url 'delete_project' proj.id %}"
+                >Remove</a
+              >
+            </td>
+          </tr>
+          {% endfor %}
+        </table>
+      </div>
+    </div>
+  </div>
+</div>
+
+{% endblock %}
