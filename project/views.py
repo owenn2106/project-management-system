@@ -1,4 +1,5 @@
 from django.shortcuts import render, redirect
+from django.forms import inlineformset_factory
 
 from .models import *
 from .forms import *
@@ -117,14 +118,18 @@ def deleteClient(request, pk_client):
     return render(request, 'project/delete_client.html', context)
 
 def createTask(request, pk_project):
-    form = TodoForm()
+    TaskFormSet = inlineformset_factory(Project, Todolist, fields=('task', 'target_time', 'status'))
     project = Project.objects.get(id=pk_project)
+    formset = TaskFormSet(queryset=Todolist.objects.none(), instance=project)
 
     if request.method == 'POST':
-        form = TodoForm(request.POST)
-        if form.is_valid():
-            form.save()
-            return redirect('/') 
+        formset = TaskFormSet(request.POST, instance=project)
+        if formset.is_valid():
+            formset.save()
+            return redirect('../details/' +str(pk_project)) 
 
-    context = {'form': form}
+    context = {
+        'formset': formset, 
+        'project': project
+    }
     return render(request, 'project/todo_form.html', context)
