@@ -17,7 +17,6 @@
         <th>Task</th>
         <th>Targetted Time</th>
         <th>Status</th>
-        <th>Mark as Done</th>
         <th>Edit</th>
         <th>Remove</th>
       </tr>
@@ -27,9 +26,8 @@
         <td>{{ todo.task }}</td>
         <td>{{ todo.target_time }}</td>
         <td>{{ todo.status }}</td>
-        <td><a href="#">Mark as Done</a></td>
-        <td><a href="#">Edit</a></td>
-        <td><a href="#">Remove</a></td>
+        <td><a href="{% url 'update_task' todo.id %}">Edit</a></td>
+        <td><a href="{% url 'delete_task' todo.id %}">Remove</a></td>
       </tr>
       {% endfor %}
     </table>

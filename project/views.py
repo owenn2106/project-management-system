@@ -133,3 +133,26 @@ def createTask(request, pk_project):
         'project': project
     }
     return render(request, 'project/todo_form.html', context)
+
+def updateTask(request, pk_task):
+    task = Todolist.objects.get(id=pk_task)
+    form = TodoForm(instance=task)
+    
+    if request.method == 'POST':
+        form = TodoForm(request.POST, instance=task)
+        if form.is_valid():
+            form.save()
+            return redirect('/') 
+
+    context = {'form': form}
+    return render(request, 'project/client_form.html', context)
+
+def deleteTask(request, pk_task):
+    task = Todolist.objects.get(id=pk_task)
+
+    if request.method == 'POST':
+        task.delete()
+        return redirect('/')
+
+    context = {'task': task}
+    return render(request, 'project/delete_task.html', context)
