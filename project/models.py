@@ -3,9 +3,9 @@ from django.db import models
 # Create your models here.
 
 class Client(models.Model):
-    name = models.CharField(max_length=255, null=True)
+    name = models.CharField(max_length=128, null=True)
     phone = models.CharField(max_length=20, null=True, blank=True)
-    email = models.CharField(max_length=255, null=True)
+    email = models.CharField(max_length=50, null=True)
     date_created = models.DateTimeField(auto_now_add=True) #auto_now is for future dates (e.g. modify date)
 
     def __str__(self):
@@ -18,11 +18,11 @@ class Project(models.Model):
         ('Done', 'Done')
     )
 
-    name = models.CharField(max_length=255, null=True)
+    name = models.CharField(max_length=128)
     deadline = models.DateTimeField()
     date_created = models.DateTimeField(auto_now_add=True)
-    description = models.CharField(max_length=255, null=True, blank=True)
-    status = models.CharField(max_length=255, null=True, choices=STATUS)
+    description = models.TextField(max_length=128, null=True, blank=True)
+    status = models.CharField(max_length=20, null=True, choices=STATUS)
 
     client = models.ForeignKey(Client, null=True, blank=True, on_delete=models.SET_NULL)
 
@@ -36,10 +36,10 @@ class Todolist(models.Model):
         ('Done', 'Done')
     )
 
-    task = models.CharField(max_length=255)
+    task = models.CharField(max_length=128, null=True)
     date_created = models.DateTimeField(auto_now_add=True)
     target_time = models.DateTimeField()
-    status = models.CharField(max_length=255, null=True, choices=STATUS)
+    status = models.CharField(max_length=20, null=True, choices=STATUS)
 
     project = models.ForeignKey(Project, null=True, on_delete=models.CASCADE)
 
