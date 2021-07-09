@@ -1,5 +1,4 @@
 from django.db import models
-from django.db.models.fields import CharField
 
 # Create your models here.
 
@@ -22,7 +21,7 @@ class Project(models.Model):
     name = models.CharField(max_length=255, null=True)
     deadline = models.DateTimeField()
     date_created = models.DateTimeField(auto_now_add=True)
-    description = models.CharField(max_length=255, null=True)
+    description = models.CharField(max_length=255, null=True, blank=True)
     status = models.CharField(max_length=255, null=True, choices=STATUS)
 
     client = models.ForeignKey(Client, null=True, on_delete=models.SET_NULL)
@@ -42,7 +41,7 @@ class Todolist(models.Model):
     target_time = models.DateTimeField()
     status = models.CharField(max_length=255, null=True, choices=STATUS)
 
-    project = models.ForeignKey(Project, null=True,on_delete=models.CASCADE)
+    project = models.ForeignKey(Project, null=True, on_delete=models.CASCADE)
 
     def __str__(self):
         return str(self.task) + " - " + str(self.project)

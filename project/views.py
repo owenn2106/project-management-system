@@ -3,6 +3,7 @@ from django.forms import inlineformset_factory
 
 from .models import *
 from .forms import *
+from .filters import *
 
 # Create your views here.
 
@@ -14,12 +15,20 @@ def index(request):
     completed = projects.filter(status='Done').count()
     progress = projects.filter(status='In Progress').count()
 
+    projectFilter = ProjectFilter(request.GET, queryset=projects)
+    projects = projectFilter.qs
+
+    clientFilter = ClientFilter(request.GET, queryset=clients)
+    clients = clientFilter.qs
+
     context = {
         "projects": projects,
         "clients": clients,
         "total_projects": total_projects,
         "completed": completed,
-        "progress": progress
+        "progress": progress,
+        "projectFilter": projectFilter,
+        "clientFilter": clientFilter
     }
     return render(request, 'project/dashboard.html', context)
 
