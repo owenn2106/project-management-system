@@ -6,7 +6,7 @@ class Client(models.Model):
     name = models.CharField(max_length=255, null=True)
     phone = models.CharField(max_length=20, null=True, blank=True)
     email = models.CharField(max_length=255, null=True)
-    date_created = models.DateTimeField(auto_now_add=True)
+    date_created = models.DateTimeField(auto_now_add=True) #auto_now is for future dates (e.g. modify date)
 
     def __str__(self):
         return self.name
@@ -24,7 +24,7 @@ class Project(models.Model):
     description = models.CharField(max_length=255, null=True, blank=True)
     status = models.CharField(max_length=255, null=True, choices=STATUS)
 
-    client = models.ForeignKey(Client, null=True, on_delete=models.SET_NULL)
+    client = models.ForeignKey(Client, null=True, blank=True, on_delete=models.SET_NULL)
 
     def __str__(self):
         return str(self.name) + " - " + str(self.client)
