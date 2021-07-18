@@ -19,5 +19,7 @@
         </li>
       </ul>
     </div>
+    <span class="mr-3" style="color: white">Hello, {{ request.user }}</span>
+    <span><a class="nav-link" href="{% url 'logout' %}">Logout</a></span>
   </div>
 </nav>

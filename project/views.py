@@ -1,5 +1,8 @@
 from django.shortcuts import render, redirect
 from django.forms import inlineformset_factory
+from django.contrib.auth import authenticate, login, logout
+from django.contrib import messages
+from django.contrib.auth.decorators import login_required
 
 from .models import *
 from .forms import *
@@ -7,6 +10,48 @@ from .filters import *
 
 # Create your views here.
 
+def registerPage(request):
+    if request.user.is_authenticated:
+        return redirect('home')
+    else:
+        form = CreateUserForm()
+        if request.method == 'POST':
+            form = CreateUserForm(request.POST)
+            if form.is_valid():
+                form.save()
+                user = form.cleaned_data.get('username')
+                messages.success(request, f'Hi {user}, Welcome to SuperProject!')
+                return redirect('login')
+
+    context = {
+        'form': form
+    }
+    return render(request, 'project/register.html', context)
+
+def loginPage(request):
+    if request.user.is_authenticated:
+        return redirect('home')
+    else:
+        if request.method == 'POST':
+            username = request.POST.get('username')
+            password = request.POST.get('password')
+
+            user = authenticate(request, username=username, password=password)
+
+            if user is not None:
+                login(request, user)
+                return redirect('home')
+            else:
+                messages.error(request, 'Username or password is incorrect')
+
+    context = {}
+    return render(request, 'project/login.html', context)
+
+def logoutUser(request):
+    logout(request)
+    return redirect('login')
+
+@login_required(login_url='login')
 def index(request):
     projects = Project.objects.all()
     clients = Client.objects.all()
@@ -32,6 +77,7 @@ def index(request):
     }
     return render(request, 'project/dashboard.html', context)
 
+@login_required(login_url='login')
 def client(request, pk_client):
     client = Client.objects.get(id=pk_client)
     projects = client.project_set.all()
@@ -45,6 +91,7 @@ def client(request, pk_client):
     }
     return render(request, 'project/client.html', context)
 
+@login_required(login_url='login')
 def details(request, pk_project):
     project = Project.objects.get(id=pk_project)
     client = project.client
@@ -57,6 +104,7 @@ def details(request, pk_project):
     }
     return render(request, 'project/details.html', context)
 
+@login_required(login_url='login')
 def createProject(request):
     form = ProjectForm()
     if request.method == 'POST':
@@ -68,6 +116,7 @@ def createProject(request):
     context = {'form': form}
     return render(request, 'project/project_form.html', context)
 
+@login_required(login_url='login')
 def updateProject(request, pk_project):
     project = Project.objects.get(id=pk_project)
     form = ProjectForm(instance=project)
@@ -81,6 +130,7 @@ def updateProject(request, pk_project):
     context = {'form': form}
     return render(request, 'project/project_form.html', context)
 
+@login_required(login_url='login')
 def deleteProject(request, pk_project):
     project = Project.objects.get(id=pk_project)
 
@@ -92,6 +142,7 @@ def deleteProject(request, pk_project):
     context = {'project': project}
     return render(request, 'project/delete.html', context)
 
+@login_required(login_url='login')
 def createClient(request):
     form = ClientForm()
     if request.method == 'POST':
@@ -103,6 +154,7 @@ def createClient(request):
     context = {'form': form}
     return render(request, 'project/client_form.html', context)
 
+@login_required(login_url='login')
 def updateClient(request, pk_client):
     client = Client.objects.get(id=pk_client)
     form = ClientForm(instance=client)
@@ -116,6 +168,7 @@ def updateClient(request, pk_client):
     context = {'form': form}
     return render(request, 'project/client_form.html', context)
 
+@login_required(login_url='login')
 def deleteClient(request, pk_client):
     client = Client.objects.get(id=pk_client)
 
@@ -126,6 +179,7 @@ def deleteClient(request, pk_client):
     context = {'client': client}
     return render(request, 'project/delete_client.html', context)
 
+@login_required(login_url='login')
 def createTask(request, pk_project):
     TaskFormSet = inlineformset_factory(Project, Todolist, fields=('task', 'target_time', 'status'))
     project = Project.objects.get(id=pk_project)
@@ -143,6 +197,7 @@ def createTask(request, pk_project):
     }
     return render(request, 'project/todo_form.html', context)
 
+@login_required(login_url='login')
 def updateTask(request, pk_task):
     task = Todolist.objects.get(id=pk_task)
     form = TodoForm(instance=task)
@@ -156,6 +211,7 @@ def updateTask(request, pk_task):
     context = {'form': form}
     return render(request, 'project/client_form.html', context)
 
+@login_required(login_url='login')
 def deleteTask(request, pk_task):
     task = Todolist.objects.get(id=pk_task)
 
