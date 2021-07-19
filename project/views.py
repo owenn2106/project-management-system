@@ -1,48 +1,51 @@
+from project.decorators import unauthenticated_user
 from django.shortcuts import render, redirect
 from django.forms import inlineformset_factory
 from django.contrib.auth import authenticate, login, logout
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
+from django.contrib.auth.models import Group
 
 from .models import *
 from .forms import *
 from .filters import *
+from .decorators import *
 
 # Create your views here.
 
+@unauthenticated_user
 def registerPage(request):
-    if request.user.is_authenticated:
-        return redirect('home')
-    else:
-        form = CreateUserForm()
-        if request.method == 'POST':
-            form = CreateUserForm(request.POST)
-            if form.is_valid():
-                form.save()
-                user = form.cleaned_data.get('username')
-                messages.success(request, f'Hi {user}, Welcome to SuperProject!')
-                return redirect('login')
+    form = CreateUserForm()
+    if request.method == 'POST':
+        form = CreateUserForm(request.POST)
+        if form.is_valid():
+            user = form.save()
+            username = form.cleaned_data.get('username')
+
+            group = Group.objects.get(name='user')
+            user.groups.add(group)
+
+            messages.success(request, f'Hi {username}, Welcome to SuperProject!')
+            return redirect('login')
 
     context = {
         'form': form
     }
     return render(request, 'project/register.html', context)
 
+@unauthenticated_user
 def loginPage(request):
-    if request.user.is_authenticated:
-        return redirect('home')
-    else:
-        if request.method == 'POST':
-            username = request.POST.get('username')
-            password = request.POST.get('password')
+    if request.method == 'POST':
+        username = request.POST.get('username')
+        password = request.POST.get('password')
 
-            user = authenticate(request, username=username, password=password)
+        user = authenticate(request, username=username, password=password)
 
-            if user is not None:
-                login(request, user)
-                return redirect('home')
-            else:
-                messages.error(request, 'Username or password is incorrect')
+        if user is not None:
+            login(request, user)
+            return redirect('home')
+        else:
+            messages.error(request, 'Username or password is incorrect')
 
     context = {}
     return render(request, 'project/login.html', context)
@@ -52,6 +55,7 @@ def logoutUser(request):
     return redirect('login')
 
 @login_required(login_url='login')
+@admin_only
 def index(request):
     projects = Project.objects.all()
     clients = Client.objects.all()
