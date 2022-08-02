@@ -8,4 +8,6 @@ It has multiple functionalities such as:
 - Filtering (Using Django Filters)
 - Django Forms
 
+Feel free to git pull or git clone the file and run the server using `python manage.py runserver`.
+
 ### Additional Note: I might have pip freeze the wrong packages into the requirements.txt so please do not use pip install requirements.txt for this specific project.
